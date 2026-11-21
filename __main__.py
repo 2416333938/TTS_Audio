@@ -6,6 +6,9 @@ import re
 import wave
 import on
 import hashlib
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -25,6 +28,39 @@ client = OpenAI(
     base_url="https://api.xiaomimimo.com/v1",
 )
 
+
+class 音频合成限流器:
+    def __init__(self, 每秒最大合成数):
+        self.rate = 每秒最大合成数
+        self.capacity = max(1.0, 每秒最大合成数)
+        self.tokens = self.capacity
+        self.updated_at = time.monotonic()
+        self.lock = threading.Lock()
+
+    def acquire(self):
+        while True:
+            with self.lock:
+                now = time.monotonic()
+                elapsed = now - self.updated_at
+                self.tokens = min(
+                    self.capacity,
+                    self.tokens + elapsed * self.rate,
+                )
+                self.updated_at = now
+
+                if self.tokens >= 1:
+                    self.tokens -= 1
+                    return
+
+                wait_seconds = (1 - self.tokens) / self.rate
+
+            time.sleep(max(wait_seconds, 0.01))
+
+
+合成限流器 = None
+MAX_WORKERS = 10
+
+
 def 合成音频(text):
     cache_key = hashlib.sha256(text.encode("utf-8")).hexdigest()
     cache_path = os.path.join(AUDIO_DIR, f"{cache_key}.wav")
@@ -39,6 +75,7 @@ def 合成音频(text):
         except (wave.Error, EOFError, OSError):
             os.remove(cache_path)
 
+    合成限流器.acquire()
     print(f"正在合成：{text} ...")
     resp = client.chat.completions.create(
         model="mimo-v2.5-tts",
@@ -64,8 +101,12 @@ def 合成并保存音频(text, filename="test_output.wav", 间隔秒数=0):
     pcm_segments = []
     wav_format = None
 
+    unique_segments = list(dict.fromkeys(segments))
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        audio_by_segment = dict(zip(unique_segments, executor.map(合成音频, unique_segments)))
+
     for segment in segments:
-        with wave.open(io.BytesIO(合成音频(segment)), "rb") as wav:
+        with wave.open(io.BytesIO(audio_by_segment[segment]), "rb") as wav:
             format_info = (
                 wav.getnchannels(),
                 wav.getsampwidth(),
@@ -91,11 +132,30 @@ def 合成并保存音频(text, filename="test_output.wav", 间隔秒数=0):
     print(f" 已生成 {filename}")
 
 
+# 获取限流
+rate_input = on.ask_input(
+    title="合成限流",
+    prompt="请输入每秒最多合成多少个音频：",
+    default="5",
+)
+if rate_input is None:
+    raise SystemExit
+
+try:
+    每秒最大合成数 = float(rate_input)
+except ValueError:
+    raise ValueError("每秒合成数量必须是数字")
+
+if not math.isfinite(每秒最大合成数) or 每秒最大合成数 <= 0:
+    raise ValueError("每秒合成数量必须是大于 0 的有限数字")
+
+合成限流器 = 音频合成限流器(每秒最大合成数)
+
 # 获取间隔时间
 time_input = on.ask_input(
     title="间隔时间",
     prompt="请输入间隔时间（秒）：",
-    default="5",
+    default="2",
 )
 if time_input is None:
     raise SystemExit
