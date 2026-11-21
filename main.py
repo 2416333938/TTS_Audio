@@ -58,7 +58,7 @@ class 音频合成限流器:
 
 
 合成限流器 = None
-MAX_WORKERS = 10
+MAX_WORKERS = 30
 
 
 def 合成音频(text):
@@ -136,7 +136,7 @@ def 合成并保存音频(text, filename="test_output.wav", 间隔秒数=0):
 rate_input = on.ask_input(
     title="合成限流",
     prompt="请输入每秒最多合成多少个音频：",
-    default="5",
+    default="30",
 )
 if rate_input is None:
     raise SystemExit
