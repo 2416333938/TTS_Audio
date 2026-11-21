@@ -63,3 +63,4 @@
 # 许可证 (License)
 
 本项目采用 [GNU General Public License v3.0](LICENSE) 协议开源。
+Copyright (C) 2024 李天月。
