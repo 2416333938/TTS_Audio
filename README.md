@@ -1,14 +1,17 @@
 # 概要
+
 本项目基于 MIMO API，将教师输入的文本按段落合成为音频，支持设置合成限流和段落间隔，输出为 WAV 文件。
+
 # 环境要求
+
 1.支持 Windows/其他不知道
 
 2.你需要额外安装openai和python-dotenv来运行它，你可以运行
-```(bash)
-python -m venv .venv
-.venv\Scripts\activate
+
+```(cmd)
 pip install -r requirements.txt
 ```
+
 来安装它们
 
 3.这个项目需要网络
@@ -16,9 +19,12 @@ pip install -r requirements.txt
 4.运行``main.py``以运行它
 
 5.软件UI 使用了 tkinter，这个库Windows 自带，但是Linux 可能需要 python3-tk
+
 # 使用示例
+
 1.在根目录下创建一个```.env```的文件，里面写入```MMIMO_API_KEY=你的MIMO_API_KEY```的内容,<font color=red>打包好的软件也要写!，要放在根目录下</font>
->.env 作为外部文件放在 .exe /.py同目录
+
+> .env 作为外部文件放在 .exe /.py同目录
 
 2.启动软件，你会看到如
 ![**合成限流**
@@ -42,8 +48,11 @@ pip install -r requirements.txt
 的界面，然后把你需要转为音频的文字复制进去就可以了 **（用两个空格分隔分段）** 例如``第一段文本  第二段文本  第三段文本``
 
 5.输出文件是根目录下的单个文件``test_output.wav``
+
 # 项目细则
+
 1.运行项目时会生成一个``Audio``的文件夹，这个文件夹是项目的缓存文件夹,缓存文件都在这里，如果文件夹占用大小过大时可以尝试删除这个文件夹，但如果删除了这个文件夹，生成可能变慢。
+
 > 1.变慢是因为当你重组 ``test_output.wav`` 时要重新生成单词录音
 
 > 2.这个文件夹可以安全的删除
@@ -53,18 +62,29 @@ pip install -r requirements.txt
 2.文件的输出文件是根目录的``test_output.wav``文件,打包后的输出的文件在``main.exe``的同目录下，<font color=red>重复输出文件时文件会被覆盖</font>
 
 # 常见问题 / 故障排查
-## 提示 API Key 无效怎么办  
+
+## 提示 API Key 无效怎么办
+
 重新申请API、检测格式是否正确、检查 .env 文件名、变量名大小写、路径、空格、余额、base_url、网络/代理
-## 合成失败 / 限流怎么办   
+
+## 合成失败 / 限流怎么办
+
  重新运行软件试试
-## 没有生成 ``test_output.wav`` 
+
+## 没有生成 ``test_output.wav``
+
 检测是否有文件读写的权限、检查是否有成功合成段落、Audio 是否为空、输出文件是否被占用、目录是否可写
-## 中文乱码 / 路径有空格    
+
+## 中文乱码 / 路径有空格
+
 未测试
-## 删除 Audio 后重新生成很慢    
+
+## 删除 Audio 后重新生成很慢
+
 检测网络后重试,会重新请求 TTS，可能重新消耗 token
 
 # 项目结构
+
 ```
 .
 ├── main.py
@@ -77,7 +97,8 @@ pip install -r requirements.txt
 ├── docs/images/
 └── test_output.wav #输出文件
 ```
+
 # 许可证 (License)
 
 本项目采用 [GNU General Public License v3.0](LICENSE) 协议开源。
-Copyright (C) 2024 李天月。
+Copyright (C) 2026 李天月。
