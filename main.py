@@ -16,10 +16,15 @@
 import os
 import synthesized_recording
 import tkinter as tk
+import Lead_reading
 
 root = tk.Tk()
-root.title("音频合成器")
+root.title("菜单")
 
 button1 = tk.Button(root, text="生成音频", command=lambda: synthesized_recording.main())
+button2 = tk.Button(root, text="跟读朗诵", command=lambda: Lead_reading.main())
+button3 = tk.Button(root, text="退出", command=root.quit)
 button1.pack()
+button2.pack()
+button3.pack()
 root.mainloop()
