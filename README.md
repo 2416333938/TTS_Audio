@@ -1,100 +1,109 @@
-# 概要
+[中文](README_CN.md)|English
+# Overview
 
-本项目基于 MIMO API，将教师输入的文本按段落合成为音频，支持设置合成限流和段落间隔，输出为 WAV 文件。
+This project is based on the MIMO API. It synthesizes teacher-input text into audio paragraph by paragraph, supports setting the synthesis rate limit and paragraph interval, and outputs a WAV file.
 
-# 环境要求
+# Environment Requirements
 
-1. 支持 Windows/其他不知道
+1. Windows is supported / others are unknown.
 
-2. 你需要额外安装openai和python-dotenv来运行它，你可以运行
+2. You need to additionally install `openai` and `python-dotenv` to run it. You can run
 ``
 pip install -r requirements.txt
 ``
-来安装它们
+to install them.
 
-1. 这个项目需要网络
+1. This project requires a network connection.
 
-2. 运行``main.py``以运行它
+2. Run `main.py` to run it.
 
-3. 软件UI 使用了 tkinter，这个库Windows 自带，但是Linux 可能需要 python3-tk
+3. The software UI uses `tkinter`. This library is included with Windows by default, but Linux may require `python3-tk`.
 
-# 使用示例
+# Usage Example
 
-1. 在根目录下创建一个```.env```的文件，里面写入```MMIMO_API_KEY=你的MIMO_API_KEY```的内容,<font color=red>打包好的软件也要写!，要放在根目录下</font>
+1. Create a `.env` file in the root directory and write `MMIMO_API_KEY=your_MIMO_API_KEY` into it. <font color=red>The packaged software also requires this! It must be placed in the root directory.</font>
 
-> .env 作为外部文件放在 .exe /.py同目录
+> `.env` is placed as an external file in the same directory as the `.exe` / `.py` file.
 
-2. 启动软件，你会看到如
+2. Start the software, and you will see something like:
 ![菜单
 生成音频
 跟读朗诵
 退出](docs/images/菜单.png)
-## 生成录音
-3. 点击生成录音，你会看到如
+
+## Generate Recording
+3. Click Generate Recording, and you will see something like:
 ![**合成限流**
 请输入每秒最多合成多少个音频:
 30
 确定 取消](docs/images/合成限流.png)
-的界面，然后你可以修改框内的数值修改每秒最多合成的音频 <font color=white>*(当然是为了防止单次合成的数量过多然后烧tok)*</font>
 
-4. 完成后你会看到如
+interface, then you can modify the value in the box to change the maximum number of audios synthesized per second. <font color=white>*(Of course, this is to prevent synthesizing too many at once and burning tokens.)*</font>
+
+4. After completion, you will see something like:
 ![**间隔时间**
 请输入间隔时间(秒):
 2
 确定 取消](docs/images/间隔时间.png)
-的界面，然后你可以修改框内的数值修改每个单词间的停顿的间隔时间 *(自己看着填，我觉得2S就好了)* 然后点确定
 
-5. 最后一步了，你上一步点确定后会看到如
+interface, then you can modify the value in the box to change the pause interval between each word. *(Fill it in as you see fit; I think 2S is fine.)* Then click OK.
+
+5. This is the last step. After you click OK in the previous step, you will see something like:
 ![**输入框**
 请输入要合成的文本(用两个空格分隔分段):
 （空）
 确定取消](docs/images/输入框.png)
-的界面，然后把你需要转为音频的文字复制进去就可以了 **（用两个空格分隔分段）** 例如``第一段文本  第二段文本  第三段文本``
 
-6. 输出文件是根目录下的单个文件``test_output.wav``
-## 跟读播放
+interface, then copy the text you need to convert to audio into it. **(Use two spaces to separate paragraphs.)** For example, `first paragraph text  second paragraph text  third paragraph text`
 
-3. 点击生成录音，你会看到如
+6. The output file is a single file `test_output.wav` in the root directory.
+
+## Follow-along Playback
+
+3. Click Generate Recording, and you will see something like:
 ![**跟读播放**
 输入文本(用两个空格分隔要逐段朗读的内容):
 段落间隔(秒): 2 ***开始朗读***
 准备就绪
-上一个 暂停 继续 下一个](docs/images/跟读播放.png)的界面，你可以在大框框内输入内容，然后设置间隔时间，最后点击开始朗读
-4. 你可以点击暂停，播放，上/下一个来控制朗诵
+上一个 暂停 继续 下一个](docs/images/跟读播放.png)
 
-# 项目细则
+interface. You can enter content in the large box, then set the interval time, and finally click Start Reading.
 
-1. 运行项目时会生成一个``Audio``的文件夹，这个文件夹是项目的缓存文件夹,缓存文件都在这里，如果文件夹占用大小过大时可以尝试删除这个文件夹，但如果删除了这个文件夹，生成可能变慢。
+4. You can click Pause, Play, Previous/Next to control the recitation.
 
-> 1. 变慢是因为当你重组 ``test_output.wav`` 时要重新生成单词录音
-> 2. 这个文件夹可以安全的删除
-> 3. 这个文件夹用来存储用来拼接``test_output.wav``的音频文件
+# Project Details
 
-2. 文件的输出文件是根目录的``test_output.wav``文件,打包后的输出的文件在``main.exe``的同目录下，<font color=red>重复输出文件时文件会被覆盖</font>
+1. When the project runs, an `Audio` folder will be generated. This folder is the project's cache folder, and cache files are stored here. If the folder takes up too much space, you can try deleting this folder, but if you delete it, generation may become slower.
 
-# 常见问题 / 故障排查
+> 1. It becomes slower because when reassembling `test_output.wav`, the word recordings need to be regenerated.
+> 2. This folder can be safely deleted.
+> 3. This folder is used to store the audio files used to concatenate `test_output.wav`.
 
-## 提示 API Key 无效怎么办
+2. The output file is the `test_output.wav` file in the root directory. After packaging, the output file is in the same directory as `main.exe`. <font color=red>The file will be overwritten when outputting repeatedly.</font>
 
-重新申请API、检测格式是否正确、检查 .env 文件名、变量名大小写、路径、空格、余额、base_url、网络/代理
+# FAQ / Troubleshooting
 
-## 合成失败 / 限流怎么办
+## What should I do if it says the API Key is invalid?
 
- 重新运行软件试试
+Reapply for the API, check whether the format is correct, and check the `.env` file name, variable name case, path, spaces, balance, `base_url`, and network/proxy.
 
-## 没有生成 ``test_output.wav``
+## What should I do if synthesis fails / is rate-limited?
 
-检测是否有文件读写的权限、检查是否有成功合成段落、Audio 是否为空、输出文件是否被占用、目录是否可写
+Try running the software again.
 
-## 中文乱码 / 路径有空格
+## `test_output.wav` was not generated
 
-未测试
+Check whether you have file read/write permissions, check whether any paragraph was successfully synthesized, whether `Audio` is empty, whether the output file is in use, and whether the directory is writable.
 
-## 删除 Audio 后重新生成很慢
+## Chinese garbled characters / spaces in the path
 
-检测网络后重试,会重新请求 TTS，可能重新消耗 token
+Not tested.
 
-# 项目结构
+## Regeneration is very slow after deleting Audio
+
+Check the network and retry. TTS will be requested again, which may consume tokens again.
+
+# Project Structure
 
 ```
 .
@@ -102,25 +111,25 @@ pip install -r requirements.txt
 ├── on.py
 ├── requirements.txt
 ├── .env
-├── Audio/ #缓存目录
+├── Audio/ # cache directory
 ├── LICENSE
 ├── .gitignore
 ├── docs/images/
-└── test_output.wav #输出文件
+└── test_output.wav # output file
 ```
 
-# 许可证 (License)
+# License
 
-本项目采用 [GNU General Public License v3.0](LICENSE) 协议开源。
-Copyright (C) 2026 李天月。
+This project is open source under the [GNU General Public License v3.0](LICENSE).
+Copyright (C) 2026 李天月.
 
-# 赞助
+# Sponsorship
 
-如果这个项目对你有帮助，欢迎自愿赞助支持维护。
+If this project is helpful to you, you are welcome to voluntarily sponsor to support maintenance.
 
-> 赞助属于自愿捐赠，不代表购买服务，不影响本项目继续以 GNU GPL v3.0 开源，也不构成额外担保或优先支持承诺。
+> Sponsorship is a voluntary donation, does not represent the purchase of services, does not affect the project's continued open-source availability under GNU GPL v3.0, and does not constitute additional warranty or priority support commitment.
 
-- 微信打赏：[![点击查看](docs/images/打赏.png)](https://cdn.luogu.com.cn/upload/image_hosting/58bf46x8.webp)
-- 微信转账：[![点击查看](docs/images/收款.png)](https://cdn.luogu.com.cn/upload/image_hosting/j21fsygr.webp)
+- WeChat tip: [![点击查看](docs/images/打赏.png)](https://cdn.luogu.com.cn/upload/image_hosting/58bf46x8.webp)
+- WeChat transfer: [![点击查看](docs/images/收款.png)](https://cdn.luogu.com.cn/upload/image_hosting/j21fsygr.webp)
 
-收款码图片仅用于自愿赞助，请注意个人信息公开风险。
+The payment QR code images are only for voluntary sponsorship. Please be aware of personal information disclosure risks.
