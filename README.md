@@ -113,3 +113,14 @@ pip install -r requirements.txt
 
 本项目采用 [GNU General Public License v3.0](LICENSE) 协议开源。
 Copyright (C) 2026 李天月。
+
+# 赞助
+
+如果这个项目对你有帮助，欢迎自愿赞助支持维护。
+
+> 赞助属于自愿捐赠，不代表购买服务，不影响本项目继续以 GNU GPL v3.0 开源，也不构成额外担保或优先支持承诺。
+
+- 微信打赏：[![点击查看](docs/images/打赏.png)](https://cdn.luogu.com.cn/upload/image_hosting/58bf46x8.webp)
+- 微信转账：[![点击查看](docs/images/收款.png)](https://cdn.luogu.com.cn/upload/image_hosting/j21fsygr.webp)
+
+收款码图片仅用于自愿赞助，请注意个人信息公开风险。
